@@ -113,7 +113,7 @@ idx_char = 0
 state = 'q0'
 current_token = ''
 index_kata = 1
-while state!='accept':
+while state!='accept' and sentence!="":
     current_char = input_string[idx_char]
     current_token += current_char
     state = transition_table[(state, current_char)]
@@ -128,5 +128,5 @@ while state!='accept':
 
 #conclusion
 if state == 'accept' and cek:
-    st.success(f"Semua Token di Input:  '{sentence}' | VALID")
+    st.success(f"Semua Token di Input:  {sentence} | VALID")
     st.balloons()
