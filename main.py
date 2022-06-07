@@ -2,9 +2,24 @@ import string
 import streamlit as st
 
 st.write("""
-# Lexical Analyzer | Kelompok 6
-Aplikasi yang mengecek susunan kata pada bahasa Makassar
+# Lexical Analyzer
+Aplikasi yang mengecek penulisan kata pada Bahasa Makassar
 """)
+st.caption("*kata yang tersedia: ammak, andi, daeng, erang, jangang, juku, kangkong, sapatu, ngandre, balli.")
+
+custom_footer = """
+<style>
+footer{
+    visinility:visible;
+}
+footer:after{
+    content:' by Kelompok 6 IF-44-11 | Reynhard, Irham, Abdul';
+    position:relative;
+}
+</style>
+"""
+
+st.markdown(custom_footer,unsafe_allow_html=True)
 
 sentence = st.text_input("Masukkan Kata", "")
 input_string = sentence.lower()+'#'
@@ -118,15 +133,15 @@ while state!='accept' and sentence!="":
     current_token += current_char
     state = transition_table[(state, current_char)]
     if state == 'q39' and cek:
-        st.success(f'Current Token: {current_token} | VALID')
+        st.write("Kata Ke-" + str(index_kata) + ": " + current_token + " \U00002705")
         current_token = ''
         index_kata += 1
     if state == 'error' and cek:
-        st.error(f'Error pada Kata ke-{index_kata}')
+        st.error(f'Kata Ke-{index_kata} Tidak Terdapat Pada Kamus')
         break;
     idx_char = idx_char + 1
 
 #conclusion
 if state == 'accept' and cek:
-    st.success(f"Semua Token di Input:  {sentence} | VALID")
+    st.success(f"Semua Kata yang Diketik:  *{sentence}* Terdapat di Kamus")
     st.balloons()
