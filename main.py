@@ -183,7 +183,7 @@ with col2:
     current_char = input_string[idx_char]
     current_token += current_char
     state = transition_table[(state, current_char)]
-    if state == 'q39':
+    if state == 'q39' and (input_string[idx_char+1] == ' '):
         st.write("Kata Ke-" + str(index_kata) + ": " + current_token + " \U00002705")
         current_token = ''
         index_kata += 1
