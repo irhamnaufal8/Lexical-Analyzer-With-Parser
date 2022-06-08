@@ -18,24 +18,41 @@ footer:after{
 }
 .css-6awftf.e19lei0e1
 {
-  visibility: hidden;
+    visibility: hidden;
+}
+.css-e370rw.e19lei0e1
+{
+    visibility: hidden;
 }
 .css-14xtw13.e8zbici0
 {
-  visibility: hidden;
+    visibility: hidden;
 }
 .css-16j60pt.edgvbvh9
 {
-  background-color: #77c4a1;
-  border-color: #77c4a1;
-  color: white;
+    background-color: #77c4a1;
+    border-color: #77c4a1;
+    color: white;
 }
 .css-16j60pt.edgvbvh9:hover
 {
-  background-color: white;
-  color: #77c4a1;
-  border-color: #77c4a1;
-  transition: 0.4s;
+    background-color: white;
+    color: #77c4a1;
+    border-color: #77c4a1;
+    transition: 0.4s;
+}
+.css-1q8dd3e.edgvbvh9
+{
+    background-color: #77c4a1;
+    border-color: #77c4a1;
+    color: white;
+}
+.css-1q8dd3e.edgvbvh9:hover
+{
+    background-color: white;
+    color: #77c4a1;
+    border-color: #77c4a1;
+    transition: 0.4s;
 }
 </style>
 """
