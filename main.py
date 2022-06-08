@@ -1,5 +1,6 @@
 import string
 import streamlit as st
+import re
 
 st.write("""
 # Lexical Analyzer
@@ -15,6 +16,11 @@ footer{
 footer:after{
     content:' by Kelompok 6 IF-44-11 | Reynhard, Irham, Abdul';
     position:relative;
+    color:darkorchid;
+}
+.css-pxxe24.effi0qh1
+{
+    visibility:hidden;
 }
 </style>
 """
@@ -34,6 +40,7 @@ transition_table = {}
 for state in state_list:
   for alphabet in alphabet_list:
     transition_table[(state, alphabet)] = 'error'
+  transition_table[(state, '.')] = 'error'
   transition_table[(state, '#')] = 'error'
   transition_table[(state, ' ')] = 'error'
 
@@ -128,20 +135,30 @@ idx_char = 0
 state = 'q0'
 current_token = ''
 index_kata = 1
-while state!='accept' and sentence!="":
+
+# regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
+# while True:
+#   masukkan = input()
+#   if (regex.search(masukkan) == None):
+#     sentence = masukkan
+#     break
+#   else:
+#     print("input tidak boleh ada symbol atau karakter spesial")
+
+while state!='accept' and cek:
     current_char = input_string[idx_char]
     current_token += current_char
     state = transition_table[(state, current_char)]
-    if state == 'q39' and cek:
+    if state == 'q39':
         st.write("Kata Ke-" + str(index_kata) + ": " + current_token + " \U00002705")
         current_token = ''
         index_kata += 1
-    if state == 'error' and cek:
+    if state == 'error':
         st.error(f'Kata Ke-{index_kata} Tidak Terdapat Pada Kamus')
         break;
     idx_char = idx_char + 1
 
 #conclusion
 if state == 'accept' and cek:
-    st.success(f"Semua Kata yang Diketik:  *{sentence}* Terdapat di Kamus")
+    st.success(f"Semua Kata yang Diketik:  *'{sentence}'* Terdapat pada Kamus")
     st.balloons()
