@@ -1,13 +1,7 @@
 import string
 import streamlit as st
-import re
 
-st.write("""
-# Lexical Analyzer
-Aplikasi yang mengecek penulisan kata pada Bahasa Makassar
-""")
-st.caption("*kata yang tersedia: ammak, andi, daeng, erang, jangang, juku, kangkong, sapatu, ngandre, balli.")
-
+st.set_page_config(layout="wide")
 custom_footer = """
 <style>
 footer{
@@ -16,20 +10,41 @@ footer{
 footer:after{
     content:' by Kelompok 6 IF-44-11 | Reynhard, Irham, Abdul';
     position:relative;
-    color:darkorchid;
+    color:#77c4a1;
 }
 .css-pxxe24.effi0qh1
 {
     visibility:hidden;
+}
+.css-6awftf.e19lei0e1
+{
+  visibility: hidden;
+}
+.css-14xtw13.e8zbici0
+{
+  visibility: hidden;
+}
+.css-16j60pt.edgvbvh9
+{
+  background-color: #77c4a1;
+  border-color: #77c4a1;
+  color: white;
+}
+.css-16j60pt.edgvbvh9:hover
+{
+  background-color: white;
+  color: #77c4a1;
+  border-color: #77c4a1;
+  transition: 0.4s;
 }
 </style>
 """
 
 st.markdown(custom_footer,unsafe_allow_html=True)
 
-sentence = st.text_input("Masukkan Kata", "")
-input_string = sentence.lower()+'#'
-cek = st.button("Cek Hasil")
+col1, col2 = st.columns(2)
+
+
 
 #initialization
 alphabet_list = list(string.ascii_lowercase)
@@ -136,16 +151,18 @@ state = 'q0'
 current_token = ''
 index_kata = 1
 
-# regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
-# while True:
-#   masukkan = input()
-#   if (regex.search(masukkan) == None):
-#     sentence = masukkan
-#     break
-#   else:
-#     print("input tidak boleh ada symbol atau karakter spesial")
+with col1:
+  st.image("https://mir-s3-cdn-cf.behance.net/project_modules/2800_opt_1/8627c832475371.5684d7c017609.jpg")
 
-while state!='accept' and cek:
+with col2:
+  st.title("Lexical Analyzer")
+  st.write("Aplikasi yang mengecek penulisan kata pada Bahasa Makassar")
+  st.caption("*kata yang tersedia: ammak, andi, daeng, erang, jangang, juku, kangkong, sapatu, ngandre, balli.")
+  sentence = st.text_input("Masukkan Kata", "")
+  input_string = sentence.lower()+'#'
+  cek = st.button("Cek Hasil")
+
+  while state!='accept' and cek:
     current_char = input_string[idx_char]
     current_token += current_char
     state = transition_table[(state, current_char)]
@@ -154,11 +171,13 @@ while state!='accept' and cek:
         current_token = ''
         index_kata += 1
     if state == 'error':
-        st.error(f'Kata Ke-{index_kata} Tidak Terdapat Pada Kamus')
         break;
     idx_char = idx_char + 1
 
 #conclusion
+if state == 'error':
+  st.error(f'Kata Ke-{index_kata} Tidak Terdapat Pada Kamus')
+
 if state == 'accept' and cek:
     st.success(f"Semua Kata yang Diketik:  *'{sentence}'* Terdapat pada Kamus")
     st.balloons()

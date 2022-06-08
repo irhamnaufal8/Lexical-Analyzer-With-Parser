@@ -1,14 +1,50 @@
 import string
 import streamlit as st
 
-st.write("""
-# Lexical Analyzer | Kelompok 6
-Aplikasi yang mengecek susunan kata pada bahasa Makassar
-""")
+st.set_page_config(layout="wide")
+custom_footer = """
+<style>
+footer{
+    visinility:visible;
+}
+footer:after{
+    content:' by Kelompok 6 IF-44-11 | Reynhard, Irham, Abdul';
+    position:relative;
+    color:#77c4a1;
+}
+.css-pxxe24.effi0qh1
+{
+    visibility:hidden;
+}
+.css-6awftf.e19lei0e1
+{
+  visibility: hidden;
+}
+.css-14xtw13.e8zbici0
+{
+  visibility: hidden;
+}
+.css-16j60pt.edgvbvh9
+{
+  background-color: #77c4a1;
+  border-color: #77c4a1;
+  color: white;
+}
+.css-16j60pt.edgvbvh9:hover
+{
+  background-color: white;
+  color: #77c4a1;
+  border-color: #77c4a1;
+  transition: 0.4s;
+}
+</style>
+"""
 
-sentence = st.text_input("Masukkan Kata", "")
-input_string = sentence.lower()+'#'
-cek = st.button("Cek Hasil")
+st.markdown(custom_footer,unsafe_allow_html=True)
+
+col1, col2 = st.columns(2)
+
+
 
 #initialization
 alphabet_list = list(string.ascii_lowercase)
@@ -19,6 +55,7 @@ transition_table = {}
 for state in state_list:
   for alphabet in alphabet_list:
     transition_table[(state, alphabet)] = 'error'
+  transition_table[(state, '.')] = 'error'
   transition_table[(state, '#')] = 'error'
   transition_table[(state, ' ')] = 'error'
 
@@ -113,20 +150,34 @@ idx_char = 0
 state = 'q0'
 current_token = ''
 index_kata = 1
-while state!='accept':
+
+with col1:
+  st.image("https://mir-s3-cdn-cf.behance.net/project_modules/2800_opt_1/8627c832475371.5684d7c017609.jpg")
+
+with col2:
+  st.title("Lexical Analyzer")
+  st.write("Aplikasi yang mengecek penulisan kata pada Bahasa Makassar")
+  st.caption("*kata yang tersedia: ammak, andi, daeng, erang, jangang, juku, kangkong, sapatu, ngandre, balli.")
+  sentence = st.text_input("Masukkan Kata", "")
+  input_string = sentence.lower()+'#'
+  cek = st.button("Cek Hasil")
+
+  while state!='accept' and cek:
     current_char = input_string[idx_char]
     current_token += current_char
     state = transition_table[(state, current_char)]
-    if state == 'q39' and cek:
-        st.success(f'Current Token: {current_token} | VALID')
+    if state == 'q39':
+        st.write("Kata Ke-" + str(index_kata) + ": " + current_token + " \U00002705")
         current_token = ''
         index_kata += 1
-    if state == 'error' and cek:
-        st.error(f'Error pada Kata ke-{index_kata}')
+    if state == 'error':
         break;
     idx_char = idx_char + 1
 
 #conclusion
+if state == 'error':
+  st.error(f'Kata Ke-{index_kata} Tidak Terdapat Pada Kamus')
+
 if state == 'accept' and cek:
-    st.success(f"Semua Token di Input:  '{sentence}' | VALID")
+    st.success(f"Semua Kata yang Diketik:  *'{sentence}'* Terdapat pada Kamus")
     st.balloons()
