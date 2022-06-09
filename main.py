@@ -177,6 +177,7 @@ with col2:
   st.caption("*kata yang tersedia: ammak, andi, daeng, erang, jangang, juku, kangkong, sapatu, ngandre, balli.")
   sentence = st.text_input("Masukkan Kata", "")
   input_string = sentence.lower()+'#'
+  input_temp = sentence.split()
   cek = st.button("Cek Hasil")
 
   while state!='accept' and cek:
@@ -193,7 +194,7 @@ with col2:
 
 #conclusion
 if state == 'error':
-  st.error(f'Kata Ke-{index_kata} Tidak Terdapat Pada Kamus')
+  st.error(f'Kata **{input_temp[index_kata-1]}** Tidak Terdapat Pada Kamus')
 
 if state == 'accept' and cek:
     st.success(f"Semua Kata yang Diketik:  *'{sentence}'* Terdapat pada Kamus")
