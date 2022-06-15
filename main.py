@@ -172,9 +172,11 @@ with col1:
   st.image("https://mir-s3-cdn-cf.behance.net/project_modules/2800_opt_1/8627c832475371.5684d7c017609.jpg")
 
 with col2:
-  st.title("Lexical Analyzer")
-  st.write("Aplikasi yang mengecek penulisan kata pada Bahasa Makassar")
-  st.caption("*kata yang tersedia: ammak, andi, daeng, erang, jangang, juku, kangkong, sapatu, ngandre, balli.")
+  st.title("Mak-Cek")
+  st.write("Aplikasi yang mengecek penulisan kata dan grammar pada Bahasa Makassar")
+  st.caption("*noun yang tersedia: ammak, andi, daeng, jangang, juku, kangkong, sapatu.")
+  st.caption("*verb yang tersedia: ngandre, balli, erang.")
+  st.caption("*susunan grammar yang benar adalah noun-verb-noun.")
   sentence = st.text_input("Masukkan Kata", "")
   input_string = sentence.lower()+'#'
   input_temp = sentence.split()
@@ -194,8 +196,100 @@ with col2:
 
 #conclusion
 if state == 'error':
+  st.header("Lexical Analyzer")
   st.error(f'Kata **{input_temp[index_kata-1]}** Tidak Terdapat Pada Kamus')
 
 if state == 'accept' and cek:
+    st.header("Lexical Analyzer")
     st.success(f"Semua Kata yang Diketik:  *'{sentence}'* Terdapat pada Kamus")
     st.balloons()
+
+#parser
+token = sentence.lower().split()
+token.append('EOS')
+
+non_terminal = ['S', 'NN', 'VB']
+terminal = ['ammak', 'andi', 'daeng', 'erang', 'jangang', 'juku', 'kangkong', 'sapatu', 'ngandre', 'balli']
+
+parse_table = {}
+
+parse_table[('S', 'ammak')] = ['NN', 'VB', 'NN']
+parse_table[('S', 'andi')] = ['NN', 'VB', 'NN']
+parse_table[('S', 'daeng')] = ['NN', 'VB', 'NN']
+parse_table[('S', 'sapatu')] = ['NN', 'VB', 'NN']
+parse_table[('S', 'jangang')] = ['NN', 'VB', 'NN']
+parse_table[('S', 'juku')] = ['NN', 'VB', 'NN']
+parse_table[('S', 'kangkong')] = ['NN', 'VB', 'NN']
+parse_table[('S', 'erang')] = ['error']
+parse_table[('S', 'ngandre')] = ['error']
+parse_table[('S', 'balli')] = ['error']
+parse_table[('S', 'EOS')] = ['error']
+
+parse_table[('NN', 'ammak')] = ['ammak']
+parse_table[('NN', 'andi')] = ['andi']
+parse_table[('NN', 'daeng')] = ['daeng']
+parse_table[('NN', 'sapatu')] = ['sapatu']
+parse_table[('NN', 'jangang')] = ['jangang']
+parse_table[('NN', 'juku')] = ['juku']
+parse_table[('NN', 'kangkong')] = ['kangkong']
+parse_table[('NN', 'erang')] = ['error']
+parse_table[('NN', 'ngandre')] = ['error']
+parse_table[('NN', 'balli')] = ['error']
+parse_table[('NN', 'EOS')] = ['error']
+
+parse_table[('VB', 'ammak')] = ['error']
+parse_table[('VB', 'andi')] = ['error']
+parse_table[('VB', 'daeng')] = ['error']
+parse_table[('VB', 'sapatu')] = ['error']
+parse_table[('VB', 'jangang')] = ['error']
+parse_table[('VB', 'juku')] = ['error']
+parse_table[('VB', 'kangkong')] = ['error']
+parse_table[('VB', 'erang')] = ['erang']
+parse_table[('VB', 'ngandre')] = ['ngandre']
+parse_table[('VB', 'balli')] = ['balli']
+parse_table[('VB', 'EOS')] = ['error']
+
+stack = []
+stack.append('#')
+stack.append('S')
+
+idx_token = 0
+symbol = token[idx_token]
+
+while len(stack) > 0 and cek  :
+  top = stack[len(stack)-1]
+  #st.write('top = ', top)
+  #print('symbol = ', symbol)
+  if top in terminal :
+    #st.write('top adalah simbol terminal')
+    if top == symbol :
+      stack.pop()
+      idx_token += 1
+      symbol = token[idx_token]
+      if symbol == 'EOS' :
+        #st.write('isi stack = ', stack)
+        stack.pop()
+    else :
+        #st.write('error')
+        break
+  elif top in non_terminal :
+    #st.write('top adalah simbol non terminal')
+    if parse_table[(top, symbol)][0] != 'error' :
+      stack.pop()
+      symbol_push = parse_table[(top, symbol)]
+      for i in range(len(symbol_push)-1, -1, -1) :
+        stack.append(symbol_push[i])
+    else : 
+      #st.write('error')
+      break
+  else :
+    #write('error')
+    break
+  #st.write('isi stack = ', stack, end='\n\n')
+
+if symbol == 'EOS' and len(stack) == 0 and cek :
+  st.header("Parser")
+  st.success(f"Semua Kata yang Diketik:  *'{sentence}'* Sudah Sesuai Grammar")
+elif  cek :
+  st.header("Parser")
+  st.error(f"Semua Kata yang Diketik: *'{sentence}'* Tidak Sesuai Grammar")
